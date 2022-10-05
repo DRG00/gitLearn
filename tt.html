@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .op {
+            width: 100%;
+            height: 100%;
+            border: 0.5px solid aqua;
+        }
+
+        .aaa {
+            /*position: relative;/* 1A  *\/*/
+            top: 100px;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            background-color: aquamarine;
+            /* 2B-flex布局 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .son {
+            /* position: absolute; 1A-定位 */
+            width: 100px;
+            height: 100px;
+            background-color: violet;
+            /* top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto; */
+            /* top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); */
+            /* top: 50%;
+            left: 50%;
+            margin-top: -50px;
+            margin-left: -50px; */
+        }
+
+        #btn {
+            width: 100px;
+            height: 100px;
+            background-color: pink;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="op">
+        <div class="aaa">
+            <div class="son"></div>
+        </div>
+    </div>
+    <button id="btn">节流</button>
+    <button id="btf">防抖</button>
+    <script>
+        // let add = (...args) => {
+        //     return args.reduce((a, b) => {
+        //         return a + b
+        //     })
+        // }
+
+        // let curry = (fn) => {
+        //     let args = []
+        //     return function res(...sss) {
+        //         if (sss.length === 0) {
+        //             return fn(...args)
+        //         } else {
+        //             args.push(...sss)
+        //             return res
+        //         }
+        //     }
+        // }
+        // console.log(curry(add)(1)(2));
+        // console.log(curry(add)(1)(2)());
+        // console.log(curry(add)(1)(2)(2)(2)());
+        // console.log(curry(add)(1)(2)(8)(6)());
+
+        let sum = (...ububub) => {
+            var ububub = []
+            // let inner = (...sss) => {
+            let inner = function (...sss) {
+                ububub.push(sss)
+                return inner
+            }
+            inner.toString = function () {
+                return ububub.reduce((a, b) => {
+                    return a + b
+                })
+            }
+            return inner
+        }
+        console.log(sum(1)(2)(8)(6));
+
+        let btn = document.querySelector('#btn')
+        let btf = document.querySelector('#btf')
+        // btn.onclick = function () {
+        //     console.log(this);
+        // }
+        //节流
+        btn.addEventListener('click', jieliu(function () {
+            console.log(122);
+        }, 2000))
+
+        function jieliu(fn, deay) {
+            return function () {
+                if (fn.t) return
+                fn.t = setTimeout(() => {
+                    fn.call(this)
+                    fn.t = null
+                }, deay);
+            }
+        }
+        // 防抖
+        btf.addEventListener('click', debounce(function () {
+            console.log(222, this);
+        }, 1000))
+
+        function debounce(fn, deay) {
+            return function () {
+                clearTimeout(fn.timer)
+                fn.timer = setTimeout(() => {
+                    fn.call(this)
+                }, deay);
+            }
+        }
+        // let flag = null
+        // function bbt() {
+        //     if (flag) {
+        //         let timer = setTimeout(() => {
+        //             console.log(22)
+        //             flag = false
+        //             clearTimeout(timer)
+        //         }, 2000)
+        //     } else {
+        //         console.log(22)
+        //         flag = true
+        //     }
+        // }
+        // function bbt() {
+        //     if (flag) return;
+        //     flag = setTimeout(() => {
+        //         console.log(111);
+        //         flag = null
+        //     }, 2000);
+        // }
+    </script>
+</body>
+
+</html>
